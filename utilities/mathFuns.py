@@ -2,4 +2,4 @@
 from math import abs
 
 def sign(num):
-	return num/ans(num)
+	return num/abs(num)
