@@ -4,6 +4,12 @@
 from mathFuns import *
 import numpy np
 import math
+from math import transpose
+from numpy import cos
+from numpy import sin
+from numpy import tanh
+from numpy import atan2
+from math import abs
 
 """ this is the top level fucntion that will call all of the other functions. It will produce 
 a control signal as the output """
@@ -37,8 +43,10 @@ def getControl(q, q_d, Fx, Fy):
 	# set gains
 	k_u = 1
 	k_w = 1
-	# define delta p
-	v = -k_u*sign()*np.tanh()
+	# following two lines aren't yet functional
+	phi = atan2(Fy,Fx)
+	#phiDot = 
+	v = -k_u*sign(math.transpose(delta_p)*[cos(theta); sin(theta)])*tanh(abs(delta_p)**2) 
 	w =-k_w*(theta - phi) + phiDot  # omega
 	u = [v w]
 	return u
