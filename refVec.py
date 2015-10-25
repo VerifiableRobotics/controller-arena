@@ -2,53 +2,54 @@
 
 # these functions require stuff
 from mathFuns import *
-import numpy np
-import math
-from math import transpose
-from numpy import cos
-from numpy import sin
-from numpy import tanh
-from numpy import atan2
-from math import abs
+from numpy import *
+from math import *
 
 """ this is the top level fucntion that will call all of the other functions. It will produce 
 a control signal as the output """
 def RVFcontroller(q, q_d):
 	# obtain reference vector field value
-	[Fx, Fy] = getVectorField(q) 
+	F = getVectorField(q, q_d) # F is an array containing Fx and FY
 	#
 	# obtain control signal as a fcn of reference vector field value
-	u = getControl(q, q_d, Fx, Fy)
+	u = getControl(q, q_d, F)
 	return u
 
 def getVectorField(q, q_d):
+	# return type: numpy array
+	# note: unsure if this vector field was just an example from the paper!!
 	# compute vector field F
 	# unpack
-	x = q(0)
-	y = q(1)
-	x_d = q_d(0)
-	y_d = q_d(1)
+	x = q[0]
+	y = q[1]
+	x_d = q_d[0]
+	y_d = q_d[1]
 	#
 	# compute [taken from paper draft]
 	Fx = 2*(x - x_d)**2 - (y - y_d)**2
 	Fy = 3*(x - x_d)*(y - y_d)
-	#
-	return [Fx Fy]
+	F = array([Fx Fy])
+	return F
 
-def getControl(q, q_d, Fx, Fy):
+def getControl(q, q_d, F):
+	# I think that this control law is not a function of the vector field, and that it should
+	# work if F(q) changes
+	# 
 	# compute control signal u
 	# unpack
 	delta_p = q - q_d
-	theta = q(2)
+	theta = q[2]
 	# set gains
 	k_u = 1
 	k_w = 1
 	# following two lines aren't yet functional
+	Fx = array[0]
+	Fy = array[1]
 	phi = atan2(Fy,Fx)
-	#phiDot = 
-	v = -k_u*sign(math.transpose(delta_p)*[cos(theta); sin(theta)])*tanh(abs(delta_p)**2) 
+	phiDot = 1/(1+(Fy/Fx)^2) # derivative done by hand (sign convention ok?)
+	v = -k_u*sign(transpose(delta_p)*[cos(theta); sin(theta)])*tanh(abs(delta_p)**2) 
 	w =-k_w*(theta - phi) + phiDot  # omega
-	u = [v w]
+	u = array([v w])
 	return u
 
 	## figure out how to deal with arrays in python
