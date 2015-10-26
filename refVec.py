@@ -37,17 +37,17 @@ def getControl(q, q_d, F):
 	# 
 	# compute control signal u
 	# unpack
-	delta_p = q - q_d
+	delta_p = q - q_d # can I do this in python? # intended to be a 1x2 array
 	theta = q[2]
 	# set gains
 	k_u = 1
 	k_w = 1
 	# following two lines aren't yet functional
-	Fx = array[0]
-	Fy = array[1]
+	Fx = F[0]
+	Fy = F[1]
 	phi = atan2(Fy,Fx)
 	phiDot = 1/(1+(Fy/Fx)^2) # derivative done by hand (sign convention ok?)
-	v = -k_u*sign(transpose(delta_p)*[cos(theta); sin(theta)])*tanh(abs(delta_p)**2) 
+	v = -k_u*sign(delta_p*array([[cos(theta)],[sin(theta)]])*tanh(abs(delta_p)**2) 
 	w =-k_w*(theta - phi) + phiDot  # omega
 	u = array([v w])
 	return u
