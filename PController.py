@@ -6,54 +6,55 @@ import math
 import numpy as np
 
 
-class ProportionalController:
+class PController:
     def __init__(self, x0, kp): #call state and gain
-        self.x = x #set state to x
-        self.kp = kp #set gain 
+        self.x = x0 #set state to x
+        self.kp = kp #set gain
+        self.stage = 0
         
 
     def getOutput(self, ref, y):
         
         # u_k = kp*(r - y_k)
         
-        #controller 1, rotate robot so that it faces destination point
-    
-        beta = math.arctan(ref[1][0]/ref[0][0]) #angle from robots current orientation to face destionation 
-        y_th = y[2][0] #current orientaiton angle 
+        if self.stage == 0: #controller 1, rotate robot so that it faces destination point
+            beta = math.atan2(ref[1][0],ref[0][0]) #angle from robots current orientation to face destionation
+            y_th = y[2][0] #current orientaiton angle
+            
+            err = abs(beta - y_th)
+            
+            if err > 1e-6:
+                return np.array([[0],[self.kp*(beta - y_th)]])
+            
+            else:
+                self.stage += 1
+                return np.array([[0],[0]])
         
-        err = (beta - y_th)
-        if err > 1e-6:
-            return np.array([[0],[self.kp*(beta - y_th)]])
+        elif self.stage == 1: #controller 2, move robot along 1-D line of motion to arrive at dest point
+            r = math.sqrt(y[0][0]**2 + y[1][0]**2) #distance from origin
+            rd = math.sqrt(ref[0][0]**2 + ref[1][0]**2) #distance of end point from origin
+            
+            err = abs(r - rd)
+            
+            if err > 1e-6:
+                return np.array([[self.kp*(rd - r)], [0]])
+            else:
+                self.stage += 1
+                return np.array([[0],[0]])
         
-        #controller 2, move robot along 1-D line of motion to arrive at dest point
-        r = math.sqrt(self.x[0]^2 + self.x[1]^2) #distance from origin
-        rd = math.sqrt(self.ref[0]^2 + self.ref[1]^2) #distance of end point from origin
+        else: #controller 3, rotate robot so that it is oriented correctly now that it is at dest pt
+            ref_th = ref[2][0] #angle from robots current orientation to face destionation
+            y_th = y[2][0] #current orientaiton angle
+            
+            err = abs(ref_th - y_th)
+            if err > 1e-6:
+                return np.array([[0],[self.kp*(ref_th - y_th)]])
+            else:
+                return np.array([[0],[0]])
         
-        err = (r -rd)
-        
-        if err < 1e-6:
-            return np.array([[self.kp*(r - rd)], [0]])
-        
-        #controller 3, rotate robot so that it is oriented correctly now that it is at dest pt
-        ref_th = ref[2][0] #angle from robots current orientation to face destionation 
-        y_th = y[1][0] #current orientaiton angle 
-        
-        err = (ref_th - y_th)
-        
-        if err < 1e-6:
-            return np.array([[0],[self.kp*(ref_th - y_th)]])
     
     def updateState(self, ref, y, dt):
         # theta_k+1 = 0
         pass    
         
         
-        
-     
-
-    
-
-    
-       
-        
-    
