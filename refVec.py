@@ -47,7 +47,7 @@ def getControl(q, q_d, F):
 	Fy = F[1]
 	phi = atan2(Fy,Fx)
 	phiDot = 1/(1+(Fy/Fx)^2) # derivative done by hand (sign convention ok?)
-	v = -k_u*sign(delta_p*array([[cos(theta)],[sin(theta)]])*tanh(abs(delta_p)**2) 
+	v = -k_u*sign(delta_p*array([[cos(theta)],[sin(theta)]])*tanh(linalg.norm(delta_p)**2) 
 	w =-k_w*(theta - phi) + phiDot  # omega
 	u = array([v w])
 	return u
