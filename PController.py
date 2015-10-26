@@ -1,54 +1,59 @@
 #P Controller
 # x = state vector
 # u = input vector
-from AbstractIOModel import *
+
+import math
 import numpy as np
 
-# Implementing abstract methods
-class ProportionalController(AbstractIOModel):
-    def __init__(self, x, dt): #call state and delta t 
-        self.x = x #set state to x
-        self.dt = dt #set time step to delta t
-        
-        #hard coding endpoint in for rn 
-        
-        self.ref = array([3, 4, math.pi/2]) #desired ending point of
-        
-        self.kp = 10 #gain 
 
-    def step(self, u):
+class ProportionalController:
+    def __init__(self, x0, kp): #call state and gain
+        self.x = x #set state to x
+        self.kp = kp #set gain 
+        
+
+    def getOutput(self, ref, y):
+        
+        # u_k = kp*(r - y_k)
         
         #controller 1, rotate robot so that it faces destination point
-        beta = math.arctan(self.ref[1]/self.ref[0]) #angle of dest point wrt Golobal
-        del_theta = (beta - self.x[2]) #diff in angle betweeen bot and dest pt
-        if del_theta <= .001: 
-            err = self.ref[2] - u[2] #find angle difference from target location 
-            u = self.kp*array([[0.],[err]]) #update u vector with omega to move
-            del_theta = beta - (self.x[3] + u[1]*self.dt) #update del_theta with new angle diff 
-        return u #output vector with velovity
+    
+        beta = math.arctan(ref[1][0]/ref[0][0]) #angle from robots current orientation to face destionation 
+        y_th = y[2][0] #current orientaiton angle 
+        
+        err = (beta - y_th)
+        if err > 1e-6:
+            return np.array([[0],[self.kp*(beta - y_th)]])
         
         #controller 2, move robot along 1-D line of motion to arrive at dest point
-        
         r = math.sqrt(self.x[0]^2 + self.x[1]^2) #distance from origin
         rd = math.sqrt(self.ref[0]^2 + self.ref[1]^2) #distance of end point from origin
         
+        err = (r -rd)
+        
+        if err < 1e-6:
+            return np.array([[self.kp*(r - rd)], [0]])
+        
+        #controller 3, rotate robot so that it is oriented correctly now that it is at dest pt
+        ref_th = ref[2][0] #angle from robots current orientation to face destionation 
+        y_th = y[1][0] #current orientaiton angle 
+        
+        err = (ref_th - y_th)
+        
+        if err < 1e-6:
+            return np.array([[0],[self.kp*(ref_th - y_th)]])
     
-        if (rd-r) <= 0.001:
-            
-            xerr[0] = self.ref[0] - math.cos(self.x[2])*u[0] #find x error
-            yerr[0] = self.ref[1] - math.cos(self.x[2])*u[0] #find x error
-            err = math.sqrt(xerr[0]^2 + yerr[1]^2) 
-            u = self.kp*np.array([[err[0]], [0.]]) #update u vector with velocity to move 
-        return u #output vector with velovity
+    def updateState(self, ref, y, dt):
+        # theta_k+1 = 0
+        pass    
+        
+        
+        
+     
+
     
+
     
-       #controller 3, rotate robot so that it is oriented correctly now that it is at dest pt
        
-        del_theta = (self.ref[2] - self.x[2]) #diff in angle betweeen bot and dest pt
-        if del_theta <= .001: 
-            err = self.ref[2] - u[2] #find angle diff from bot orientation and target orientation 
-            u = self.kp*array([[0.],[err]]) #update u vector with omega to move
-            del_theta = beta - (self.x[3] + u[1]*self.dt) #update del_theta with new angle diff 
-        return u #output vector with velovity
         
     
