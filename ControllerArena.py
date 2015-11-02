@@ -2,7 +2,7 @@ import socket
 import time
 import numpy as np
 
-class ControllerArena:
+class ControllerArena(object):
     def __init__(self):
         # Socket address
         HOST = '127.0.0.1'

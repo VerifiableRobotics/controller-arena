@@ -1,6 +1,6 @@
 import numpy as np
 
-class ProportionalController:
+class ProportionalController(object):
     def __init__(self, x0, kp):
         # Initialize controller state
         self.x = 0
