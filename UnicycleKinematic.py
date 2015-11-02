@@ -1,7 +1,7 @@
 import numpy as np
 from math import sin, cos
 
-class UnicycleKinematic:
+class UnicycleKinematic(object):
     def __init__(self, x0):
         # Initialize plant state
         self.x = np.copy(x0.astype(float))

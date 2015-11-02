@@ -2,17 +2,10 @@ import socket
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Time step
-dt = 0.05
-# Stop time
-t_stop = 10
-
 # Set up plot
 plt.figure()
 # Data line
 l, = plt.plot([], [], 'r-')
-# Set x-axis limits
-plt.xlim(0, t_stop)
 # Don't block when showing plot
 plt.show(block=False)
 
