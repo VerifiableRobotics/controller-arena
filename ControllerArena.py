@@ -46,11 +46,11 @@ class ControllerArena(object):
             # Delay time step
             time.sleep(dt)
         # Get final controller output
-        u = C.getOutput(ref, y)
-        # Get final plant output
-        y = P.getOutput(u)
-        # Log plant output
-        self.s.sendall(str(y))
+        # u = C.getOutput(ref, y)
+        # # Get final plant output
+        # y = P.getOutput(u)
+        # # Log plant output
+        # self.s.sendall(str(y))
 
     def __del__(self):
         # Close connection

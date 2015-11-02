@@ -8,7 +8,7 @@ dt = 0.05
 # Stop time
 t_stop = 10
 # Reference vector
-ref = np.array([[10], [0], [0]])
+ref = np.array([[10], [10], [np.pi/4]])
 # Initial controller state
 x0_c = 0
 # Proportional gain
