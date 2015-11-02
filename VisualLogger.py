@@ -17,22 +17,25 @@ plt.xlim(0, t_stop)
 plt.show(block=False)
 
 
-def process(l, datum):
-    # Extract x-coordinate
-    datum = float(datum[2:-2].split(']\n [')[0].strip())
+def process(l, datum, config_arr):
+    # Extract coordinates
+    datum_arr = map(lambda (x): float(x.strip()), datum[2:-2].split(']\n ['))
+    xdata = datum_arr[config_arr[0]]
+    ydata = datum_arr[config_arr[1]]
     # Get xy data from plot
     x = l.get_xdata()
     y = l.get_ydata()
     if len(x) > 0:
         # Append new data
-        l.set_xdata(np.append(x, l.get_xdata()[-1]+dt))
-        l.set_ydata(np.append(y, datum))
-        # Adjust y-axis limits
+        l.set_xdata(np.append(x, xdata))
+        l.set_ydata(np.append(y, ydata))
+        # Adjust axis limits
+        plt.xlim(0, np.amax(l.get_xdata())*1.05)
         plt.ylim(0, np.amax(l.get_ydata())*1.05)
     else:
         # Add first coordinates
-        l.set_xdata([0])
-        l.set_ydata([datum])
+        l.set_xdata([xdata])
+        l.set_ydata([ydata])
     # Update plot
     plt.draw()
 
@@ -48,6 +51,9 @@ s.listen(1)
 # Accept connection
 conn, addr = s.accept()
 print "Connected by", addr
+config_str = conn.recv(1024)
+config_arr = map(lambda (x): int(x), config_str.split(','))
+conn.sendall('Ready')
 while 1:
     # Receive data
     datum = conn.recv(1024)
@@ -55,7 +61,7 @@ while 1:
         # If data is not terminating
         try:
             # Process and plot data
-            process(l, datum)
+            process(l, datum, config_arr)
         except:
             # Handle invalid data without closing connection
             print "Invalid data received"
