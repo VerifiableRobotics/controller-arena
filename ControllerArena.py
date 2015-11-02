@@ -1,5 +1,6 @@
 import socket
 import time
+import numpy as np
 
 class ControllerArena:
     def __init__(self):
@@ -10,6 +11,12 @@ class ControllerArena:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Connect to socket
         self.s.connect((HOST, PORT))
+
+    def vis_config(self, config_str):
+        # Send configuration string to Visual Logger server
+        self.s.sendall(config_str)
+        self.s.recv(1024)
+        print 'Visual Logger configured'
 
     def sim(self, Controller, kp, Plant, ref, x0_c, x0_p, y0, dt, t_stop):
         # Initialize controller
@@ -30,10 +37,12 @@ class ControllerArena:
             y = P.getOutput(u)
             # Update controller output
             P.updateState(u, dt)
-            # Log plant output
-            self.s.sendall(str(y))
             # Update time
             t += dt
+            # Add time to output vector
+            out = np.concatenate((np.array([[t]]), y))
+            # Log plant output
+            self.s.sendall(str(out))
             # Delay time step
             time.sleep(dt)
         # Get final controller output
