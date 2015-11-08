@@ -11,7 +11,7 @@ dt = 0.05
 # Stop time
 t_stop = 10
 # Reference vector
-ref = np.array([[10], [7], [2]])
+ref = np.array([[10], [0], [0]])
 # Initial controller state
 x0_c = 0
 # Proportional gain
@@ -29,4 +29,5 @@ ca = ControllerArena()
 
 ca.config(configs)
 # ca.sim(PC.ProportionalController, kp, UK.UnicycleKinematic, ref, x0_c, x0_p, y0, dt, t_stop)
+
 ca.sim(rv.refVec, kp, r, UK.UnicycleKinematic, ref, x0_c, x0_p, y0, dt, t_stop)

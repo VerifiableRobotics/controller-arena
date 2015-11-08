@@ -23,15 +23,9 @@ class ControllerArena(object):
         self.s.recv(1024)
         print 'Logger configured'
 
-<<<<<<< 9bf95599cc47d45f7b9bd56cfd9cb7e793d127ee:src/controllerarena/ControllerArena.py
     def sim(self, Controller, kp, Plant, ref, x0, dt, tol):
         # Initialize controller
         C = Controller(kp)
-=======
-    def sim(self, Controller, kp, r, Plant, ref, x0_c, x0_p, y0, dt, t_stop):
-        # Initialize controller
-        C = Controller(x0_c, kp, r)
->>>>>>> Added paramters to be passed, vectorization, working on beter phiDot:ControllerArena.py
         # Initialize plant
         P = Plant(x0)
         # Initialize output
@@ -44,11 +38,6 @@ class ControllerArena(object):
         while not (abs(np.linalg.norm(buff[0]-ref)) < tol and abs(np.linalg.norm(buff[1]-ref)) < tol):
             # Get controller output
             u = C.getOutput(ref, y)
-<<<<<<< 4cfbad623651ab85a2b47ee5f24c2845f4ca3e4b:src/controllerarena/ControllerArena.py
-=======
-            # Update controller state
-            C.updateState(ref, y, dt)
->>>>>>> naming convetnion changed to underscored_stuff():ControllerArena.py
             # Get plant output
             y = P.getOutput(u, dt)
             # Add time to output vector

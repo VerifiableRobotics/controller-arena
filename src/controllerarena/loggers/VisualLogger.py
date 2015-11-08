@@ -47,7 +47,7 @@ def process(lines, datum, configs):
             l.set_ydata([ydata])
         # Update plot
         plt.draw()
-
+        
 # Socket address
 HOST = '127.0.0.1'
 PORT = 8080
