@@ -23,9 +23,15 @@ class ControllerArena(object):
         self.s.recv(1024)
         print 'Logger configured'
 
+<<<<<<< 9bf95599cc47d45f7b9bd56cfd9cb7e793d127ee:src/controllerarena/ControllerArena.py
     def sim(self, Controller, kp, Plant, ref, x0, dt, tol):
         # Initialize controller
         C = Controller(kp)
+=======
+    def sim(self, Controller, kp, r, Plant, ref, x0_c, x0_p, y0, dt, t_stop):
+        # Initialize controller
+        C = Controller(x0_c, kp, r)
+>>>>>>> Added paramters to be passed, vectorization, working on beter phiDot:ControllerArena.py
         # Initialize plant
         P = Plant(x0)
         # Initialize output
