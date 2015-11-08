@@ -44,6 +44,11 @@ class ControllerArena(object):
         while not (abs(np.linalg.norm(buff[0]-ref)) < tol and abs(np.linalg.norm(buff[1]-ref)) < tol):
             # Get controller output
             u = C.getOutput(ref, y)
+<<<<<<< 4cfbad623651ab85a2b47ee5f24c2845f4ca3e4b:src/controllerarena/ControllerArena.py
+=======
+            # Update controller state
+            C.updateState(ref, y, dt)
+>>>>>>> naming convetnion changed to underscored_stuff():ControllerArena.py
             # Get plant output
             y = P.getOutput(u, dt)
             # Add time to output vector

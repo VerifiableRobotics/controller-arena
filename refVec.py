@@ -11,9 +11,8 @@ class refVec:
         # Initialize controller state
         self.r = r # column vector; parameter used to construct vector field
         self.phi_prev = q_0[3][0]
-        pass
 
-    def getVectorField(self, q, q_d):
+    def get_vector_field(self, q, q_d):
 		# return type: numpy array
 		# note: unsure if this vector field was just an example from the paper!!
 		# compute vector field F
@@ -31,7 +30,7 @@ class refVec:
 		F = lamb*(dot(transpose(r)[0], q)[0])*q - r*(dot(transpose(q)[0], q)[0]) # should be col vector
 		return F
 
-    def getControl(self, q, q_d, F, dt):
+    def get_control(self, q, q_d, F, dt):
 		# I think that this control law is not a function of the vector field, and that it should
 		# work if F(q) changes
 		# 
@@ -49,7 +48,6 @@ class refVec:
 		Fx = F[0][0]
 		Fy = F[1][0]
 		phi = atan2(Fy,Fx)
-		phiDot = 0 # just for now
 		# backward finite difference for phidot
 		phiDot = (phi-self.phi_prev)/dt
 		# if we are not on the initial step, set phi_prev to the newly computed phi for the next loop
@@ -59,17 +57,17 @@ class refVec:
 		u = array([[v], [w]])
 		return u
 
-    def getOutput(self, q_d, q): # obtain reference vector field value
+    def get_output(self, q_d, q): # obtain reference vector field value
         F = self.getVectorField(q, q_d) # F is an column vector
         ## obtain control signal as a fcn of reference vector field value
         u = self.getControl(q, q_d, F, dt)
         return u
 
-    def updateState(self, q_d, q, dt):
+    def update_state(self, q_d, q, dt):
     	# x_k+1 = 0
     	pass
 
-    def modAngles(ang1, ang2):
+    def mod_angles(ang1, ang2):
     	return (ang1 - ang2 + pi)%(2*pi) - pi
 # For future:
 # pass r vector as parameter - done
