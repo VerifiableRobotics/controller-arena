@@ -11,7 +11,7 @@ dt = 0.05
 # Stop time
 t_stop = 10
 # Reference vector
-ref = np.array([[10], [0], [0]])
+ref = np.array([[10], [10], [2]])
 # Initial controller state
 x0_c = 0
 # Proportional gain
@@ -19,7 +19,7 @@ kp = 9
 # reference vector field paramter
 r = np.array([[1],[0]])
 # reference vector controller paramter
-controller_flag = 1 # 1: P"D", 3:P
+controller_flag = 3 # 1: P"D", 3:P
 # Initial plant state 
 x0_p = np.array([[5], [5], [0]])
 # Initial plant output (controller input delayed 1 step to break algebraic loop)

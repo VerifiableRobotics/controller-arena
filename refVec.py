@@ -83,21 +83,21 @@ class refVec:
         phi = vec_ang[0][0]
         phi_dot = vec_ang[1][0]
         theta = q[2][0]
-        v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )*tanh(linalg.norm(delta_p)**2) 
+        v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )[0]*tanh(linalg.norm(delta_p)**2) 
         w = -k_w*self.sub_angles(theta, phi) + phi_dot  # omega
         return array([[v], [w]]) # u
-
-	def more_D_PD_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
+    
+    def more_D_PD_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
 		pass
+    
+    def P_control(self, q, delta_p, vec_ang, k_u, k_w):
+        phi = vec_ang[0][0]
+        theta = q[2][0]
+        v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )[0]*tanh(linalg.norm(delta_p)**2) 
+        w = -k_w*self.sub_angles(theta, phi) # angle minus angle desired at the current moment, which is phi
+        return array([[v], [w]]) # u
 
-	def P_control(self, q, delta_p, vec_ang, k_u, k_w):
-		phi = vec_ang[0][0]
-		theta = q[2][0]
-		v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )*tanh(linalg.norm(delta_p)**2) 
-		w = -k_w*self.sub_angles(theta, phi) # angle minus angle desired at the current moment, which is phi
-		return array([[v], [w]]) # u
-
-	def PI_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
+    def PI_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
 		pass
 
     def update_state(self, q_d, q, dt):

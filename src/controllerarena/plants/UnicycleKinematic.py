@@ -16,4 +16,7 @@ class UnicycleKinematic(object):
         # x_k+1 = x_k + B_k*u_k
         theta = self.x[2]
         B = np.matrix([[cos(theta), 0], [sin(theta), 0], [0, 1]])
+        #print B
+        #print u
+        #print dt
         self.x += B*u*dt
