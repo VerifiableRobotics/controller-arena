@@ -14,6 +14,7 @@ class refVec:
         self.phi_prev = None
         self.q_prev = q_0
         self.controller_flag = controller_flag
+        self.e_int = 0
 
 
     def get_output(self, q_d, q, dt): # obtain reference vector field value
@@ -47,6 +48,7 @@ class refVec:
 		# 
 		# compute control signal u 
         delta_p = q[0:2][0] - q_d[0:2][0] # location - location_desired
+        self.e_int += linalg.norm(delta_p)*dt
 		# set gains
         k_u = 1
         k_w = 1
@@ -88,9 +90,11 @@ class refVec:
         return array([[v], [w]]) # u
     
     def more_D_PD_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
+        # PLAN: wrt original: add 'dot' term to linear velocity
 		pass
-    
+
     def P_control(self, q, delta_p, vec_ang, k_u, k_w):
+        # wrt original: Removed phi-dot term from angular velocity formula
         phi = vec_ang[0][0]
         theta = q[2][0]
         v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )[0]*tanh(linalg.norm(delta_p)**2) 
@@ -98,7 +102,12 @@ class refVec:
         return array([[v], [w]]) # u
 
     def PI_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
-		pass
+        # wrt original: Removed phi-dot term from angular velocity formula and added integral term to linear velocity
+        phi = vec_ang[0][0]
+        theta = q[2][0]
+        v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )[0]*(tanh(linalg.norm(delta_p)**2) + self.e_int)
+        w = -k_w*self.sub_angles(theta, phi) # angle minus angle desired at the current moment, which is phi
+        return array([[v], [w]]) # u
 
     def update_state(self, q_d, q, dt):
     	# x_k+1 = 0
