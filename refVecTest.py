@@ -17,7 +17,9 @@ x0_c = 0
 # Proportional gain
 kp = 9
 # reference vector field paramter
-r = array([[1],[0]])
+r = np.array([[1],[0]])
+# reference vector controller paramter
+controller_flag = 1 # 1: P"D", 3:P
 # Initial plant state
 x0_p = np.array([[5], [5], [0]])
 # Initial plant output (controller input delayed 1 step to break algebraic loop)
@@ -30,4 +32,4 @@ ca = ControllerArena()
 ca.config(configs)
 # ca.sim(PC.ProportionalController, kp, UK.UnicycleKinematic, ref, x0_c, x0_p, y0, dt, t_stop)
 
-ca.sim(rv.refVec, kp, r, UK.UnicycleKinematic, ref, x0_c, x0_p, y0, dt, t_stop)
+ca.sim(rv.refVec, kp, r, UK.UnicycleKinematic, ref, x0_c, x0_p, y0, dt, t_stop, controller_flag)
