@@ -20,7 +20,7 @@ kp = 9
 r = np.array([[1],[0]])
 # reference vector controller paramter
 controller_flag = 1 # 1: P"D", 3:P
-# Initial plant state
+# Initial plant state 
 x0_p = np.array([[5], [5], [0]])
 # Initial plant output (controller input delayed 1 step to break algebraic loop)
 y0 = np.array([[5], [5], [0]])

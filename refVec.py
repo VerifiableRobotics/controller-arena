@@ -46,12 +46,12 @@ class refVec:
 		# work if F(q) changes
 		# 
 		# compute control signal u 
-		delta_p = q[0:2][0] - q_d[0:2][0] # location - location_desired
+        delta_p = q[0:2][0] - q_d[0:2][0] # location - location_desired
 		# set gains
-		k_u = 1
-		k_w = 1
-		Fx = F[0][0]
-		Fy = F[1][0]
+        k_u = 1
+        k_w = 1
+        Fx = F[0][0]
+        Fy = F[1][0]
         phi = atan2(Fy,Fx)
 		# backward finite difference for phidot
         if self.phi_prev == None: # if this is the first pass through the controller, phi_dot = 0
@@ -79,32 +79,32 @@ class refVec:
 # implement integral accumulator
 # make sure var names and passing is compatible^
 
-    def original_control(q, delta_p, vec_ang, k_u, k_w):
+    def original_control(self, q, delta_p, vec_ang, k_u, k_w):
         phi = vec_ang[0][0]
         phi_dot = vec_ang[1][0]
         theta = q[2][0]
         v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )*tanh(linalg.norm(delta_p)**2) 
-        w = -k_w*sub_angles(theta, phi) + phi_dot  # omega
+        w = -k_w*self.sub_angles(theta, phi) + phi_dot  # omega
         return array([[v], [w]]) # u
 
-	def more_D_PD_control(q, q_dot, delta_p, vec_ang, k_u, k_w):
+	def more_D_PD_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
 		pass
 
-	def P_control(q, delta_p, vec_ang, k_u, k_w):
+	def P_control(self, q, delta_p, vec_ang, k_u, k_w):
 		phi = vec_ang[0][0]
 		theta = q[2][0]
 		v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )*tanh(linalg.norm(delta_p)**2) 
-		w = -k_w*sub_angles(theta, phi) # angle minus angle desired at the current moment, which is phi
+		w = -k_w*self.sub_angles(theta, phi) # angle minus angle desired at the current moment, which is phi
 		return array([[v], [w]]) # u
 
-	def PI_control(q, q_dot, delta_p, vec_ang, k_u, k_w):
+	def PI_control(self, q, q_dot, delta_p, vec_ang, k_u, k_w):
 		pass
 
     def update_state(self, q_d, q, dt):
     	# x_k+1 = 0
     	pass
 
-    def sub_angles(ang1, ang2):
+    def sub_angles(self, ang1, ang2):
     	return (ang1 - ang2 + pi)%(2*pi) - pi
 # For future:
 # pass r vector as parameter - done
