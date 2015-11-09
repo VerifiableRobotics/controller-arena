@@ -1,6 +1,11 @@
 import socket
 import time
 import numpy as np
+import json
+
+class DataEncoder(json.JSONEncoder):
+    def default(self, obj):
+        return {'data': map(lambda x: x[0], obj)}
 
 class ControllerArena(object):
     def __init__(self):
@@ -12,9 +17,9 @@ class ControllerArena(object):
         # Connect to socket
         self.s.connect((HOST, PORT))
 
-    def vis_config(self, config_str):
+    def config(self, configs):
         # Send configuration string to Visual Logger server
-        self.s.sendall(config_str)
+        self.s.sendall(configs)
         self.s.recv(1024)
         print 'Visual Logger configured'
 
@@ -42,7 +47,8 @@ class ControllerArena(object):
             # Add time to output vector
             out = np.concatenate((np.array([[t]]), y))
             # Log plant output
-            self.s.sendall(str(out))
+            out = json.dumps(out, cls=DataEncoder)
+            self.s.sendall(out)
             # Delay time step
             time.sleep(dt)
         # Get final controller output
