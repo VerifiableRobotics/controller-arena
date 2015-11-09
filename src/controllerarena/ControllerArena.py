@@ -23,40 +23,39 @@ class ControllerArena(object):
         self.s.recv(1024)
         print 'Visual Logger configured'
 
-    def sim(self, Controller, kp, Plant, ref, x0_c, x0_p, y0, dt, t_stop):
+    def sim(self, Controller, kp, Plant, ref, x0, dt, t_stop):
         # Initialize controller
-        C = Controller(x0_c, kp)
+        C = Controller(kp)
         # Initialize plant
-        P = Plant(x0_p)
+        P = Plant(x0)
         # Initialize output
-        y = y0
+        y = x0
         # Initialize time
         t = 0
         # Simulation
         while t < t_stop:
             # Get controller output
             u = C.getOutput(ref, y)
-            # Update controller state
-            C.updateState(ref, y, dt)
             # Get plant output
-            y = P.getOutput(u)
-            # Update controller output
-            P.updateState(u, dt)
-            # Update time
-            t += dt
+            y = P.getOutput(u, dt)
             # Add time to output vector
             out = np.concatenate((np.array([[t]]), y))
             # Log plant output
             out = json.dumps(out, cls=DataEncoder)
             self.s.sendall(out)
+            # Update time
+            t += dt
             # Delay time step
             time.sleep(dt)
-        # Get final controller output
-        # u = C.getOutput(ref, y)
-        # # Get final plant output
-        # y = P.getOutput(u)
-        # # Log plant output
-        # self.s.sendall(str(y))
+        #Get final controller output
+        u = C.getOutput(ref, y)
+        # Get final plant output
+        y = P.getOutput(u, dt)
+        # Add time to output vector
+        out = np.concatenate((np.array([[t]]), y))
+        # Log plant output
+        out = json.dumps(out, cls=DataEncoder)
+        self.s.sendall(out)
 
     def __del__(self):
         # Close connection

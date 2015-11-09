@@ -6,9 +6,11 @@ class UnicycleKinematic(object):
         # Initialize plant state
         self.x = np.copy(x0.astype(float))
 
-    def getOutput(self, u):
+    def getOutput(self, u, dt):
         # y_k = x_k
-        return np.copy(self.x)
+        y = np.copy(self.x)
+        self.updateState(u, dt)
+        return y
 
     def updateState(self, u, dt):
         # x_k+1 = x_k + B_k*u_k
