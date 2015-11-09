@@ -1,6 +1,5 @@
 from ControllerArena import *
 # import ProportionalController as PC
-import PController as PC
 import refVec as rv
 import UnicycleKinematic as UK
 import numpy as np
@@ -19,7 +18,7 @@ kp = 9
 # reference vector field paramter
 r = np.array([[1],[0]])
 # reference vector controller paramter
-controller_flag = 4 # 1: P"D", 3:P, 4:PI
+controller_flag = 1 # 1: P"D", 3:P, 4:PI
 # Initial plant state 
 x0_p = np.array([[5], [5], [0]])
 # Initial plant output (controller input delayed 1 step to break algebraic loop)
