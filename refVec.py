@@ -41,28 +41,29 @@ class refVec:
 		# note: unsure if this vector field was just an example from the paper!!
 		# compute vector field F
 		# unpack
-#		x = q[0][0]
-#		y = q[1][0]
-#		x_d = q_d[0][0]
-#		y_d = q_d[1][0]
-#		#
-#		# compute [taken from paper draft], where r = [1;0] and lambda = 3
-#		Fx = 2*(x - x_d)**2 - (y - y_d)**2
-#		Fy = 3*(x - x_d)*(y - y_d)
-#		F = array([[Fx],[Fy]])
-		lamb = 3
+        #		x = q[0][0]
+        #		y = q[1][0]
+        #		x_d = q_d[0][0]
+        #		y_d = q_d[1][0]
+        #		#
+        #		# compute [taken from paper draft], where r = [1;0] and lambda = 3
+        #		Fx = 2*(x - x_d)**2 - (y - y_d)**2
+        #		Fy = 3*(x - x_d)*(y - y_d)
+        #		F = array([[Fx],[Fy]])
+        lamb = 3
         theta_d = q_d[2][0]
-		r = array([[cos(theta_d)],[sin(theta_d)]])
-        # q really should be delta p???
-		F = lamb*(dot(transpose(self.r)[0], q)[0])*q - self.r*(dot(transpose(q)[0], q)[0]) # should be col vector
-		return F # col vector
-
+        delta_p = q[0:2] - q_d[0:2] # location - location_desired
+        r = array([[cos(theta_d)],[sin(theta_d)]]) 
+        F = lamb*(dot(transpose(r), delta_p)[0][0])*delta_p - r*(dot(transpose(delta_p),  delta_p)[0][0]) # should be col vector
+                 
+        return F # col vector
+    
     def get_control(self, q, q_d, F, dt):
 		# I think that this control law is not a function of the vector field, and that it should
 		# work if F(q) changes
 		# 
 		# compute control signal u 
-        delta_p = q[0:2][0] - q_d[0:2][0] # location - location_desired
+        delta_p = q[0:2] - q_d[0:2] # location - location_desired
         self.e_int += self.sub_angles(q[2][0],q_d[2][0])*dt # accumulate angular error
         theta = q[2][0]
         
@@ -87,7 +88,7 @@ class refVec:
         self.q_prev = q
         
         # controller
-        v = -k_u*sign( dot(transpose(delta_p)[0], array([[cos(theta)],[sin(theta)]]) )[0] )[0]*tanh(linalg.norm(delta_p)**2) 
+        v = -k_u*sign( dot(transpose(delta_p), array([[cos(theta)],[sin(theta)]]) )[0][0] )*tanh(linalg.norm(delta_p)**2) 
         w = -k_w*self.sub_angles(theta, phi) + k_i*self.e_int + k_d*phi_dot  # k_d determines whether derivative term is used, k_i for i term
         u = array([[v], [w]])
 
