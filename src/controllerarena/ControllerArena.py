@@ -21,7 +21,7 @@ class ControllerArena(object):
         # Send configuration string to Visual Logger server
         self.s.sendall(configs)
         self.s.recv(1024)
-        print 'Visual Logger configured'
+        print 'Logger configured'
 
     def sim(self, Controller, kp, Plant, ref, x0, dt, tol):
         # Initialize controller

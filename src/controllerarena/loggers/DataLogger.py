@@ -1,8 +1,18 @@
 import socket
+import json
+
+def decode(dct):
+    if "data" in dct:
+        return dct["data"]
+    else:
+        return "Invalid JSON"
 
 def process(datum):
-    return ','.join(map(lambda x: x.strip(), datum[2:-2].split(']\n [')))
+    arr = json.loads(datum, object_hook=decode)
+    return ','.join(map(lambda x: str(x), arr))
 
+# Opening csv for logging
+fid = open('log.csv', 'w')
 # Socket address
 HOST = '127.0.0.1'
 PORT = 8080
@@ -15,6 +25,8 @@ s.listen(1)
 # Accept connection
 conn, addr = s.accept()
 print "Connected by", addr
+conn.recv(1024)
+conn.sendall('Ready')
 while 1:
     # Receive data
     datum = conn.recv(1024)
@@ -22,7 +34,9 @@ while 1:
         # If data is not terminating
         try:
             # Process and print data
-            print process(datum)
+            res = process(datum)
+            print res
+            fid.write(res + '\n')
         except:
             # Handle invalid data without closing connection
             print "Invalid data received"
@@ -33,3 +47,5 @@ while 1:
 conn.close()
 # Close socket
 s.close()
+# Close file
+fid.close()
