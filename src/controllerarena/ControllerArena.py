@@ -23,9 +23,9 @@ class ControllerArena(object):
         self.s.recv(1024)
         print 'Logger configured'
 
-    def sim(self, Controller, kp, Plant, ref, x0, dt, tol):
+    def sim(self, Controller, kp, Plant, ref, x0, dt, tol, controller_flag):
         # Initialize controller
-        C = Controller(kp)
+        C = Controller(x0, controller_flag)
         # Initialize plant
         P = Plant(x0)
         # Initialize output
@@ -37,7 +37,7 @@ class ControllerArena(object):
         # Simulation
         while not (abs(np.linalg.norm(buff[0]-ref)) < tol and abs(np.linalg.norm(buff[1]-ref)) < tol):
             # Get controller output
-            u = C.getOutput(ref, y)
+            u = C.get_output(ref, y, dt)
             # Get plant output
             y = P.getOutput(u, dt)
             # Add time to output vector
@@ -53,7 +53,7 @@ class ControllerArena(object):
             buff[1] = buff[0]
             buff[0] = y
         #Get final controller output
-        u = C.getOutput(ref, y)
+        u = C.get_output(ref, y, dt) 
         # Get final plant output
         y = P.getOutput(u, dt)
         # Add time to output vector
