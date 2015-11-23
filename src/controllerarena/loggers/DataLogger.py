@@ -1,5 +1,6 @@
 import socket
 import json
+import Metrics
 
 def decode(dct):
     if "data" in dct:
@@ -49,3 +50,6 @@ conn.close()
 s.close()
 # Close file
 fid.close()
+
+m = Metrics.Metrics()
+print "Total time:", m.totalTime()
