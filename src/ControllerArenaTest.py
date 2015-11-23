@@ -9,8 +9,8 @@ import json
 
 # Time step
 dt = 0.05
-# Stop time
-t_stop = 10
+# Stop tolerance
+tol = 1e-3
 # Reference vector
 ref = np.array([[10], [7], [2]])
 # Proportional gain
@@ -23,4 +23,4 @@ configs = json.dumps({'config': [{'x': 1, 'y': 2, 'xlabel': 'x (m)', 'ylabel': '
 ca = ControllerArena()
 ca.config(configs)
 # ca.sim(PC.ProportionalController, kp, UK.UnicycleKinematic, ref, x0_c, x0_p, y0, dt, t_stop)
-ca.sim(PC.PController, kp, UK.UnicycleKinematic, ref, x0, dt, t_stop)
+ca.sim(PC.PController, kp, UK.UnicycleKinematic, ref, x0, dt, tol)

@@ -23,7 +23,7 @@ class ControllerArena(object):
         self.s.recv(1024)
         print 'Visual Logger configured'
 
-    def sim(self, Controller, kp, Plant, ref, x0, dt, t_stop):
+    def sim(self, Controller, kp, Plant, ref, x0, dt, tol):
         # Initialize controller
         C = Controller(kp)
         # Initialize plant
@@ -32,8 +32,10 @@ class ControllerArena(object):
         y = x0
         # Initialize time
         t = 0
+        # Stop condition buffer
+        buff = [y, y]
         # Simulation
-        while t < t_stop:
+        while not (abs(np.linalg.norm(buff[0]-ref)) < tol and abs(np.linalg.norm(buff[1]-ref)) < tol):
             # Get controller output
             u = C.getOutput(ref, y)
             # Get plant output
@@ -47,6 +49,9 @@ class ControllerArena(object):
             t += dt
             # Delay time step
             time.sleep(dt)
+            # Update buffer
+            buff[1] = buff[0]
+            buff[0] = y
         #Get final controller output
         u = C.getOutput(ref, y)
         # Get final plant output
