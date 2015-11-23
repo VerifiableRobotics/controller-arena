@@ -1,1 +1,1 @@
-__all__ = ['DataLogger', 'VisualLogger']
+__all__ = ['DataLogger', 'VisualLogger', 'Metrics']
