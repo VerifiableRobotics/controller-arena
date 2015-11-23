@@ -8,9 +8,9 @@ import json
 # Time step
 dt = 0.05
 # Stop time
-t_stop = 20
+t_stop = 50
 # Reference vector
-ref = np.array([[10], [10], [0]])
+ref = np.array([[10], [10], [np.pi/2]])
 # Initial controller state
 x0_c = 0
 # Proportional gain

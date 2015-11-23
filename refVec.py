@@ -17,10 +17,10 @@ class refVec:
         self.k_u = 1
         self.k_w = 1
         if controller_flag == 1: # PID
-            self.k_i = 1
+            self.k_i = .1
             self.k_d = 1
         elif controller_flag == 2: # PI
-            self.k_i = 1
+            self.k_i = .1
             self.k_d = 0
         elif controller_flag == 3: # PD
             self.k_i = 0
