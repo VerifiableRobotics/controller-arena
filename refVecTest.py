@@ -8,7 +8,7 @@ import json
 # Time step
 dt = 0.05
 # Stop time
-t_stop = 50
+t_stop = 25
 # Reference vector
 ref = np.array([[10], [10], [np.pi/2]])
 # Initial controller state

@@ -11,22 +11,27 @@ class refVec:
         # Initialize controller state
         self.phi_prev = None
         self.q_prev = q_0
-        self.e_int = 0
+        self.e_int_w = 0
+        self.e_int_u = 0
         
         # set gains
-        self.k_u = 1
-        self.k_w = 1
+        self.k_p_u = 1   # u indicates it is an position gain. p indicates it is a proportional gain.
+        self.k_p_w = 1   # w indicates it is an angular gain. p indicates it is a proportional gain.
         if controller_flag == 1: # PID
-            self.k_i = .1
-            self.k_d = 1
+            self.k_i_w = 1
+            self.k_i_u = 1
+            self.k_d = 1 # the derivative gain is only on the angle
         elif controller_flag == 2: # PI
-            self.k_i = .1
+            self.k_i_w = 1
+            self.k_i_u = 1
             self.k_d = 0
         elif controller_flag == 3: # PD
-            self.k_i = 0
+            self.k_i_w = 0
+            self.k_i_u = 0
             self.k_d = 1
         else: # P
-            self.k_i = 0
+            self.k_i_w = 0
+            self.k_i_u = 0
             self.k_d = 0
 
 
@@ -55,7 +60,7 @@ class refVec:
         delta_p = q[0:2] - q_d[0:2] # location - location_desired
         r = array([[cos(theta_d)],[sin(theta_d)]]) 
         F = lamb*(dot(transpose(r), delta_p)[0][0])*delta_p - r*(dot(transpose(delta_p),  delta_p)[0][0]) # should be col vector
-                 
+        print F
         return F # col vector
     
     def get_control(self, q, q_d, F, dt):
@@ -64,13 +69,15 @@ class refVec:
 		# 
 		# compute control signal u 
         delta_p = q[0:2] - q_d[0:2] # location - location_desired
-        self.e_int += self.sub_angles(q[2][0],q_d[2][0])*dt # accumulate angular error
+        self.e_int_w += self.sub_angles(q[2][0],q_d[2][0])*dt # accumulate angular error
+        self.e_int_u += linalg.norm(delta_p)*dt # accumulate position error
         theta = q[2][0]
         
         # unpack gains
-        k_u = self.k_u
-        k_w = self.k_w
-        k_i = self.k_i
+        k_p_u = self.k_p_u
+        k_p_w = self.k_p_w
+        k_i_w = self.k_i_w
+        k_i_u = selg.k_i_u
         k_d = self.k_d
         
         Fx = F[0][0]
@@ -88,10 +95,10 @@ class refVec:
         self.q_prev = q
         
         # controller
-        v = -k_u*sign( dot(transpose(delta_p), array([[cos(theta)],[sin(theta)]]) )[0][0] )*tanh(linalg.norm(delta_p)**2) 
-        w = -k_w*self.sub_angles(theta, phi) + k_i*self.e_int + k_d*phi_dot  # k_d determines whether derivative term is used, k_i for i term
+        v = -k_p_u*sign( dot(transpose(delta_p), array([[cos(theta)],[sin(theta)]]) )[0][0] )*tanh(linalg.norm(delta_p)**2) - k_i_u*self.e_int_u
+        w = -k_p_w*self.sub_angles(theta, phi) - k_i_w*self.e_int_w - k_d*phi_dot  # k_d determines whether derivative term is used, k_i for i term
         u = array([[v], [w]])
-
+        print u
         return u
 
     def update_state(self, q_d, q, dt):
