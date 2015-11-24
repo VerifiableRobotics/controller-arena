@@ -16,11 +16,11 @@ class refVec:
         
         # set gains
         self.k_p_u = 1   # u indicates it is an position gain. p indicates it is a proportional gain.
-        self.k_p_w = 1   # w indicates it is an angular gain. p indicates it is a proportional gain.
+        self.k_p_w = 3   # w indicates it is an angular gain. p indicates it is a proportional gain.
         if controller_flag == 1: # PID
             self.k_i_w = 1
             self.k_i_u = 1
-            self.k_d = 1 # the derivative gain is only on the angle
+            self.k_d = -1 # the derivative gain is only on the angle
         elif controller_flag == 2: # PI
             self.k_i_w = 1
             self.k_i_u = 1

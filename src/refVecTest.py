@@ -10,13 +10,13 @@ dt = 0.05
 # Stop tolerance
 tol = 1e-1
 # Reference vector
-ref = np.array([[10], [10], [np.pi/2]])
+ref = np.array([[5], [-5], [np.pi/3]])
 # Proportional gain
 kp = 9
 # reference vector controller paramter
 controller_flag = 3 # 1: PID, 2:PI, 3:PD, 4:P
 # Initial plant state
-x0 = np.array([[0], [0], [0]])
+x0 = np.array([[-1], [1], [0]])
 
 configs = json.dumps({'config': [{'x': 1, 'y': 2, 'xlabel': 'x (m)', 'ylabel': 'y (m)'}, {'x': 0, 'y': 3, 'xlabel': 't (s)', 'ylabel': 'theta (rad)'}]})
 
