@@ -3,7 +3,7 @@
 # import UnicycleKinematic as UK
 from controllerarena.ControllerArena import *
 import controllerarena.controllers.PController as PC
-import controllerarena.plants.UnicycleKinematic as UK
+# import controllerarena.plants.UnicycleKinematic as UK
 import numpy as np
 import json
 
@@ -24,4 +24,4 @@ ca = ControllerArena()
 
 ca.config("Start")
 
-ca.sim(PC.PController, kp, UK.UnicycleKinematic, ref, x0, dt, tol)
+ca.sim(PC.PController, kp, ref, x0, dt, tol, 1)

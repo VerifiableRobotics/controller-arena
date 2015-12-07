@@ -23,11 +23,14 @@ class ControllerArena(object):
         self.s.recv(1024)
         print 'Logger configured'
 
-    def sim(self, Controller, kp, Plant, ref, x0, dt, tol, controller_flag):
+    def sim(self, Controller, kp, ref, x0, dt, tol, controller_flag):
         # Initialize controller
-        C = Controller(x0, controller_flag)
+        C = Controller(kp)
         # Initialize plant
-        P = Plant(x0)
+        HOST = '127.0.0.1'
+        PORT = 8081
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((HOST, PORT))
         # Initialize output
         y = x0
         # Initialize time
@@ -37,11 +40,13 @@ class ControllerArena(object):
         # Simulation
         while not (abs(np.linalg.norm(buff[0]-ref)) < tol and abs(np.linalg.norm(buff[1]-ref)) < tol):
             # Get controller output
-            u = C.get_output(ref, y, dt)
+            u = C.getOutput(ref, y)
             # Get plant output
-            y = P.getOutput(u, dt)
+            s.sendall(str(u))
+            y = s.recv(1024)
+            y = np.array(map(lambda x: [x], map(lambda x: float(x.strip()[1:-1]), y[1:-1].split('\n'))))
             # Add time to output vector
-            out = np.concatenate((np.array([[t]]), y))
+            out = np.concatenate((np.array([[t]]), y, u))
             # Log plant output
             out = json.dumps(out, cls=DataEncoder)
             self.s.sendall(out)
@@ -52,15 +57,6 @@ class ControllerArena(object):
             # Update buffer
             buff[1] = buff[0]
             buff[0] = y
-        #Get final controller output
-        u = C.get_output(ref, y, dt) 
-        # Get final plant output
-        y = P.getOutput(u, dt)
-        # Add time to output vector
-        out = np.concatenate((np.array([[t]]), y))
-        # Log plant output
-        out = json.dumps(out, cls=DataEncoder)
-        self.s.sendall(out)
 
     def __del__(self):
         # Close connection

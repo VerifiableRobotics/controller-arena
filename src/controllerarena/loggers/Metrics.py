@@ -7,6 +7,3 @@ class Metrics(object):
 
     def totalTime(self):
         return self.data[len(self.data)-1][0]
-
-m = Metrics()
-print m.totalTime()
