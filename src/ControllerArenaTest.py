@@ -21,7 +21,7 @@ ca = ControllerArena()
 #configs = json.dumps({'config': [{'x': 1, 'y': 2, 'xlabel': 'x (m)', 'ylabel': 'y (m)'}, {'x': 0, 'y': 3, 'xlabel': 't (s)', 'ylabel': 'theta (rad)'}]})
 configs = "Start"
 
-ca.config("configs")
+ca.config(configs)
 
 ca.sim(PC.PController, kp, ref, x0, dt, tol, 1)
 #ca.sim(RV.refVec, x0, ref, x0, dt, tol, 3)
