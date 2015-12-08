@@ -15,7 +15,7 @@ class refVec:
         self.e_int_u = 0
         
         # set gains
-        self.k_p_u = 1   # u indicates it is an position gain. p indicates it is a proportional gain.
+        self.k_p_u = 1  # u indicates it is an position gain. p indicates it is a proportional gain.
         self.k_p_w = 3   # w indicates it is an angular gain. p indicates it is a proportional gain.
         if controller_flag == 1: # PID
             self.k_i_w = 1
@@ -59,7 +59,7 @@ class refVec:
         delta_p = q[0:2] - q_d[0:2] # location - location_desired
         r = array([[cos(theta_d)],[sin(theta_d)]]) 
         F = lamb*(dot(transpose(r), delta_p)[0][0])*delta_p - r*(dot(transpose(delta_p),  delta_p)[0][0]) # should be col vector
-        print F
+        #print F
         return F # col vector
     
     def get_control(self, q, q_d, F, dt):
@@ -97,7 +97,7 @@ class refVec:
         v = -k_p_u*sign( dot(transpose(delta_p), array([[cos(theta)],[sin(theta)]]) )[0][0] )*tanh(linalg.norm(delta_p)**2) - k_i_u*self.e_int_u
         w = -k_p_w*self.sub_angles(theta, phi) - k_i_w*self.e_int_w - k_d*phi_dot  # k_d determines whether derivative term is used, k_i for i term
         u = array([[v], [w]])
-        print u
+        #print u
         return u
 
     def update_state(self, q_d, q, dt):
