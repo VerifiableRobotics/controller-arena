@@ -7,7 +7,7 @@ import numpy as np
 
 
 class PController:
-    def __init__(self, kp): #call state and gain
+    def __init__(self, kp, controller_flag, dt): #call state and gain
         self.kp = kp #set gain
         self.stage = 0
 
@@ -22,7 +22,7 @@ class PController:
 
             err = abs(beta - y_th)
 
-            if err > 1e-6:
+            if err > 1e-3:
                 return np.array([[0],[self.kp*(beta - y_th)]])
 
             else:
@@ -35,7 +35,7 @@ class PController:
 
             err = abs(r - rd)
 
-            if err > 1e-6:
+            if err > 1e-3:
                 return np.array([[self.kp*(rd - r)], [0]])
             else:
                 self.stage += 1
@@ -46,7 +46,7 @@ class PController:
             y_th = y[2][0] #current orientaiton angle
 
             err = abs(ref_th - y_th)
-            if err > 1e-6:
+            if err > 1e-3:
                 return np.array([[0],[self.kp*(ref_th - y_th)]])
             else:
                 return np.array([[0],[0]])

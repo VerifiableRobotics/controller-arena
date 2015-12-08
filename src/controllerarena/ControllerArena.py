@@ -25,7 +25,7 @@ class ControllerArena(object):
 
     def sim(self, Controller, kp, ref, x0, dt, tol, controller_flag):
         # Initialize controller
-        C = Controller(kp)
+        C = Controller(kp, controller_flag, dt)
         # Initialize plant
         HOST = '127.0.0.1'
         PORT = 8081
@@ -46,7 +46,7 @@ class ControllerArena(object):
             y = s.recv(1024)
             y = np.array(map(lambda x: [x], map(lambda x: float(x.strip()[1:-1]), y[1:-1].split('\n'))))
             # Add time to output vector
-            out = np.concatenate((np.array([[t]]), y, u))
+            out = np.concatenate((np.array([[t]]), y, u, ref))
             # Log plant output
             out = json.dumps(out, cls=DataEncoder)
             self.s.sendall(out)
