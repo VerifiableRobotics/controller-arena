@@ -28,7 +28,7 @@ class ControllerArena(object):
         C = Controller(kp, controller_flag, dt)
         # Initialize plant
         HOST = '127.0.0.1'
-        PORT = 8081
+        PORT = 8082
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((HOST, PORT))
         # Initialize output

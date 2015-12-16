@@ -32,7 +32,7 @@ class UnicycleKinematic(object):
         #print dt
         self.x += B*u*dt
 
-uk = UnicycleKinematic(8081, np.array([[0], [0], [0]]), 0.05)
+uk = UnicycleKinematic(8082, np.array([[0], [0], [0]]), 0.05)
 while 1:
     control = uk.conn.recv(1024)
     if control:
