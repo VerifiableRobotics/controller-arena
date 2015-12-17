@@ -1,0 +1,38 @@
+#VRML_SIM V8.3.0 utf8
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.149366 -0.977679 -0.147763 1.58258
+  position -1.59422 0.561331 0.420687
+}
+Background {
+  skyColor [
+    0.233021 0.342473 0.757092
+    0 0 0
+  ]
+}
+RectangleArena {
+  floorSize 15 15
+}
+DirectionalLight {
+  ambientIntensity 1
+  direction 0 -1 0
+  castShadows TRUE
+}
+Supervisor {
+  children [
+    Emitter {
+      channel 1
+    }
+  ]
+  controller "supervisorController"
+}
+DEF PIONEER Pioneer3dx {
+  rotation 0 1 0 0.25
+  controller "referenceVectorField"
+  extensionSlot [
+    Receiver {
+      channel 1
+    }
+  ]
+}
