@@ -66,8 +66,8 @@ def process(lines, datum, configs):
             l.set_xdata(np.append(x, xdata))
             l.set_ydata(np.append(y, ydata))
             # Adjust axis limits
-            plt.xlim(np.amin(l.get_xdata()), np.amax(l.get_xdata())*5)
-            plt.ylim(np.amin(l.get_xdata()), np.amax(l.get_ydata())*5)
+            plt.xlim(np.amin(l.get_xdata()), np.amax(l.get_xdata())+20)
+            plt.ylim(np.amin(l.get_xdata()), np.amax(l.get_ydata())+20)
             # for visible portion of graph, calculate vector field
         else:
             # Add first coordinates
