@@ -8,20 +8,22 @@ import json
 # Time step
 dt = 0.0005
 # Stop tolerance
-tol = .1
+tol = .15
 # Reference vector
-xd=-1
-yd=1
-thetaD=0
-ref = np.array([[-1], [1], [0]])
+xd=10
+yd=10
+thetaD=np.pi/2
+ref = np.array([[xd], [yd], [thetaD]])
 # Proportional gain
 kp = 9
 # reference vector controller paramter
 controller_flag = 3 # 1: PID, 2:PI, 3:PD, 4:P
 # Initial plant state
-x0 = np.array([[0], [0], [0]])
+xi=0
+yi=0
+x0 = np.array([[xi], [yi], [0]])
 
-configs = json.dumps({'config': [{'x': 1, 'y': 2,'xd': -1, 'yd': 1,'theta': 0, 'xlabel': 'x (m)', 'ylabel': 'y (m)'}, {'x': 0, 'y': 3, 'xlabel': 't (s)', 'ylabel': 'theta (rad)'}, {'ref': ref }  ]})
+configs = json.dumps({'config': [{'x': 1, 'y': 2,'xd': xd, 'yd': yd,'theta': thetaD,'xi': xi,'yi': yi, 'xlabel': 'x (m)', 'ylabel': 'y (m)'}, {'x': 0, 'y': 3, 'xlabel': 't (s)', 'ylabel': 'theta (rad)'}]})
 
 ca = ControllerArena()
 

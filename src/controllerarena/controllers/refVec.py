@@ -42,18 +42,6 @@ class refVec:
 
     def get_vector_field(self, q, q_d):
 		# return type: numpy array
-		# note: unsure if this vector field was just an example from the paper!!
-		# compute vector field F
-		# unpack
-        #		x = q[0][0]
-        #		y = q[1][0]
-        #		x_d = q_d[0][0]
-        #		y_d = q_d[1][0]
-        #		#
-        #		# compute [taken from paper draft], where r = [1;0] and lambda = 3
-        #		Fx = 2*(x - x_d)**2 - (y - y_d)**2
-        #		Fy = 3*(x - x_d)*(y - y_d)
-        #		F = array([[Fx],[Fy]])
         lamb = 3
         theta_d = q_d[2][0]
         delta_p = q[0:2] - q_d[0:2] # location - location_desired

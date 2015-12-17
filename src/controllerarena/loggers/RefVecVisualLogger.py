@@ -23,24 +23,28 @@ def decode(dct):
             # generate points for vector field
             xd = dct["xd"] #desired position x
             yd = dct["yd"] #desired position y
-            thetaD = ect["theta"] #desired orientation
+            xi = dct["xi"] #initial position x
+            yi = dct["yi"] #initial position y
+            thetaD = dct["theta"] #desired orientation
             L=3 # hardcoded vector field lambda for now
-            n=15 # hardcoded spacing of vector field for now
-            X = np.mgrid[yd+n:yd-n:(2*n+1)*1j,xd-n:xd+n:(2*n+1)*1j][1]
-            Y = np.mgrid[yd+n:yd-n:(2*n+1)*1j,xd-n:xd+n:(2*n+1)*1j][0]
+            n=20 #int(np.linalg.norm(np.array([[xi-xd],[yi-yd]])))+1 # hardcoded spacing of vector field for now
+            X = np.mgrid[yd+n:yi:(2*n+1)*1j, xi:xd+n:(2*n+1)*1j][1]
+            Y = np.mgrid[yd+n:yi:(2*n+1)*1j, xi:xd+n:(2*n+1)*1j][0]
             #
             # compute vector field
+            U = np.zeros(shape=(2*n+1,2*n+1)) # initialize memory
+            V = np.zeros(shape=(2*n+1,2*n+1)) # initialize memory
             r=np.array([[np.cos(thetaD)],[np.sin(thetaD)]])
             for i in xrange(0,2*n+1):
                 for j in xrange(0,2*n+1):
                     p=np.array([[ X[i][j]-xd ],[ Y[i][j]-yd ]])
                     F = L*(np.dot(np.transpose(r), p)[0][0])*p - r*(np.dot(np.transpose(p),  p)[0][0])
-                    F = F/np.linalg.norm(F)
+                    F = (F/np.linalg.norm(F)) # this would normalize vector field so all arrows are the same length
                     U[i][j]=F[0][0]
                     V[i][j]=F[1][0]
             #
             # plot vector field
-            Q=plt.quiver(X,Y,U,V)
+            plt.quiver(X,Y,U,V)
             
         l, = plt.plot([], [], 'r-')
         lines.append(l)
@@ -62,8 +66,8 @@ def process(lines, datum, configs):
             l.set_xdata(np.append(x, xdata))
             l.set_ydata(np.append(y, ydata))
             # Adjust axis limits
-            plt.xlim(0, np.amax(l.get_xdata())*1.05)
-            plt.ylim(0, np.amax(l.get_ydata())*1.05)
+            plt.xlim(np.amin(l.get_xdata()), np.amax(l.get_xdata())*5)
+            plt.ylim(np.amin(l.get_xdata()), np.amax(l.get_ydata())*5)
             # for visible portion of graph, calculate vector field
         else:
             # Add first coordinates
